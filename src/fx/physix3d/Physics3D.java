@@ -20,6 +20,7 @@ public class Physics3D {
 	private Group world;
 	private boolean clear=true;
 	public Physics3D(Group root) {
+		System.out.println("Physics init");
 		world=root;	
 	}
 	

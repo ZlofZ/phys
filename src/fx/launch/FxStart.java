@@ -76,9 +76,10 @@ public class FxStart extends Application {
 
         @Override
         public void handle(long now) {
-        	if(run3D)
+        	if(run3D){
         		app3d.draw();
-        	else 
+        		app3d.fps(now);
+        	}else 
         		app2d.draw();
         }
     }

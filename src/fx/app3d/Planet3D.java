@@ -1,13 +1,10 @@
 package fx.app3d;
 
 
-import com.sun.java_cup.internal.runtime.virtual_parse_stack;
 import com.sun.javafx.geom.Vec3d;
 
 import fx.physix3d.Body3D;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.PointLight;
 import javafx.scene.effect.Reflection;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
