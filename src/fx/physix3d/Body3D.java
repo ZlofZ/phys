@@ -7,10 +7,11 @@ import javafx.scene.Group;
 
 public abstract class Body3D extends Position3Dv2 {
 	private static final double G=6.67408*Math.pow(10, -11);
-	
+	private static Integer renderScale;
 	private Vec3d velocity=new Vec3d();
-	public Body3D(double xPos, double yPos, double zPos, Group world) {
-		super(xPos, yPos, zPos, world);
+	public Body3D(double xPos, double yPos, double zPos, Group world, Integer rs) {
+		super(xPos, yPos, zPos, world, rs);
+		this.renderScale=rs;
 	}
 	public Vec3d getVelocity() {
 		return velocity;
@@ -42,11 +43,11 @@ public abstract class Body3D extends Position3Dv2 {
 	private double forceCalc(double massOther, double distance){
 		System.out.println("calculate dragforce: [force]=[G]x[otherMass]/[distance]^2");
 		double temp1=G*massOther;
-		double temp2=Math.pow((distance*1000), 2);
+		double temp2=Math.pow((distance), 2);
 		double force=Math.abs(temp1/temp2);
-		System.out.println("Distance:["+distance*1000+"Km]\nmassOther:["+massOther+"]Kg");
+		System.out.println("Distance:["+distance+"Km]\nmassOther:["+massOther+"]Kg");
 		System.out.println("=["+force+"]");
-		return force/60;
+		return force;
 	}
 	
 //	public void calcDrag(Planet3D other){

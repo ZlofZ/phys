@@ -15,6 +15,7 @@ public class Planet3D extends Body3D {
 	private final double RADIUS_KM;
 	private final double DENSITY_G_CM=5.2;
 	private final double VOLUME_KM;
+	private static Integer renderScale;
 	
 	private final Vec3d FIRSTPOS;
 	private Vec3d oldPos;
@@ -22,21 +23,22 @@ public class Planet3D extends Body3D {
 	private Color color;
 	private Sphere sphere;
 	private boolean backtostart=false;
-	public Planet3D(double x, double y, double z, int radius, double mass, Color color, Group world){
-		super(x/500, y/500, z/500, world);
+	public Planet3D(double x, double y, double z, int radius, double mass, Color color, Group world, Integer rs){
+		super(x, y, z, world, rs);
+		renderScale=rs;
 		oldPos = new Vec3d(this);
 		FIRSTPOS=new Vec3d(this);
-		RADIUS_KM=radius/500;
+		RADIUS_KM=radius;
 		VOLUME_KM=calcVol();
-		MASS_KG=mass/500;
+		MASS_KG=mass;
 		this.color=color;
-		makeSphere(radius/500);
-		System.out.println("Constructing planet at ("+x/500+","+y/500+","+z/500+"), radius:"+radius+"("+sphere.getRadius()+" in program), and mass:"+mass+"("+MASS_KG+" in program)");
+		makeSphere(radius*renderScale);
+		System.out.println("Constructing planet at ("+x+","+y+","+z+"), radius:"+radius+"("+sphere.getRadius()+" in program), and mass:"+mass+"("+MASS_KG+" in program)");
 		world.getChildren().add(sphere);
 	}
-	
+	@Deprecated
 	public Planet3D(double x, double y, double z, int radius, Color color, Group world){
-		super(x, y, z, world);
+		super(x, y, z, world, new Integer(0));
 		System.out.println("Constructing planet at ("+x+","+y+","+z+"), radius:"+radius);
 		oldPos = new Vec3d(this);
 		FIRSTPOS=new Vec3d(this);
@@ -57,15 +59,15 @@ public class Planet3D extends Body3D {
 		return this.color;
 	}
 	public double getRadius(){
-		return RADIUS_KM;
+		return RADIUS_KM/renderScale;
 	}
 	public double getMass(){
-		return MASS_KG;
+		return MASS_KG/renderScale;
 	}
 	
 	//===============SETTERS==============
 	public void setSize(double newSize){
-		this.sphere.setRadius(newSize);
+		this.sphere.setRadius(newSize*renderScale);
 	}
 	public void increaseSize(double increaseAmount){
 		this.sphere.setRadius(sphere.getRadius()+increaseAmount);
@@ -79,9 +81,9 @@ public class Planet3D extends Body3D {
 	}
 	private void setSphereTranslate(){
 		sphere.setMaterial(new PhongMaterial(color));
-		sphere.setTranslateX(x);
-		sphere.setTranslateY(y);
-		sphere.setTranslateZ(z);
+		sphere.setTranslateX(x/renderScale);
+		sphere.setTranslateY(y/renderScale);
+		sphere.setTranslateZ(z/renderScale);
 		
 	}
 	

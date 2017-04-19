@@ -1,11 +1,14 @@
 package fx.app3d;
 
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Random;
 
 import com.sun.javafx.perf.PerformanceTracker;
 
 import fx.controls3d.CameraHandler;
+import fx.controls3d.TopBarControls;
 import fx.launch.Xform;
 import fx.physix3d.Physics3D;
 import javafx.animation.AnimationTimer;
@@ -19,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,45 +34,28 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 public class Appen3D {
-	private PerformanceTracker tracker;
 	private final Group root;
 	final Group axisGroup;
 	private Xform world;
 	private Scene scene;
 	private Label fps=new Label("fps");
 	private CameraHandler ch;
-	private Xform cameraXform;
-    private Xform cameraXform2;
-    private Xform cameraXform3;
-    private static long timeLastFrame=0;
-    
+	private TopBarControls tpb;
+    private static long lastUpdate=0;
+    private long last=0;
+    private NumberFormat formatter = new DecimalFormat("#0.00");
     Physics3D phys;
-	
     private static double width = 1280;
 	private static double height = 720;
-	
+	public static Integer renderScale;
 	private Timeline timeline=new Timeline();
     boolean timelinePlaying = false;
     
-	
-	
-	
-	
-	
-	
-	
-	
 	private SubScene sbs;
-	
 	private VBox topBar;
-	private Slider cameraZpos=new Slider(3000, 10000, 15000);
-	
 	private Xform container;
 	private Group sp;
-	private Group sp2;
-	private Group sp3;
 	
-	private int counter=0;
 	
 	
 	
@@ -86,10 +73,11 @@ public class Appen3D {
 	}
 	
 	public void fps(long now){
-		String string="FPS:"+((now-timeLastFrame)*0.000000001);
-		timeLastFrame=now;
-		fps.setText(string);
-		
+		if((now-lastUpdate)>100000000){
+	    	fps.setText("FPS:"+formatter.format((1000000000.0/(now-last))));
+	    	lastUpdate=now;
+	    }
+		last=now;
 	}
 	
 	private void before(){
@@ -99,8 +87,9 @@ public class Appen3D {
 	
 	
 	private void makeEarth() {
-		Planet3D s=new Planet3D(0, 0, 0, 695700, 1.989*Math.pow(10, 30), Color.ORANGERED, container);
-		Planet3D e=new Planet3D(149600000, 0, 0, 6371,(5.972*Math.pow(10, 24)), Color.GREEN, container);
+		System.out.println("PlanetCreation");
+		Planet3D s=new Planet3D(0, 0, 0, 695700, 1.989*Math.pow(10, 30), Color.ORANGERED, container, renderScale);
+		Planet3D e=new Planet3D(149600000, 0, 0, 6371,(5.972*Math.pow(10, 24)), Color.GREEN, container, renderScale);
 		e.addVelocity(0,0,29782/100);
 //		s.lightSwitch();
 //		e.setX(0);
@@ -123,72 +112,6 @@ public class Appen3D {
 			phys.addPlanet(new Planet3D((random.nextDouble()*200)-100, (random.nextDouble()*200)-100, (random.nextDouble()*200)-100, random.nextInt(25)+5, color, sp));
 		}
 	}
-	
-	
-	private void rotate(){
-		if(counter<=720*2)
-			counter++;
-		else counter=1;
-		
-		container.setRotate(counter*.25);
-		sp.setRotate(counter);
-		sp2.setRotate(-counter*2);
-		sp3.setRotate(counter);
-	}
-	
-	
-	private void updateCam(){
-		ch.getCamera().setTranslateZ(-cameraZpos.getValue());
-	}
-	
-	private void makeShapes(){
-		PhongMaterial material = new PhongMaterial();
-		material.setDiffuseColor(Color.LIGHTBLUE);
-		
-		Box box = new Box(1000, 1000, 1000);
-		box.setTranslateX(-1200);
-		box.setTranslateY(0);
-		box.setTranslateZ(1);
-		box.setMaterial(material);
-		box.setDepthTest(root.getDepthTest());
-		
-		Sphere sphere = new Sphere(500);
-		sphere.setTranslateX(0);
-		sphere.setTranslateY(-5);
-		sphere.setTranslateZ(2);
-		sphere.setMaterial(material);
-		sphere.setDepthTest(root.getDepthTest());
-		
-		Cylinder cylinder = new Cylinder(400, 1200);
-		cylinder.setTranslateX(+1200);
-		cylinder.setTranslateY(-25);
-		cylinder.setTranslateZ(3);
-		cylinder.setMaterial(material);
-		cylinder.setDepthTest(root.getDepthTest());
-		
-		PointLight light = new PointLight();
-		light.setTranslateX(0);
-		light.setTranslateY(100);
-		light.setTranslateZ(-3100);
-		sp2=new Group(box, sphere);
-		sp3=new Group(cylinder);
-		sp=new Group(sp2,sp3);
-		container=new Xform(sp);
-		setRotY();
-		root.getChildren().addAll(topBar,container,light);
-	}
-	
-	private void setRotY(){
-		container.setRotationAxis(Rotate.X_AXIS);
-		sp.setRotationAxis(Rotate.Y_AXIS);
-		sp2.setRotationAxis(Rotate.Y_AXIS);
-		sp3.setRotationAxis(Rotate.Y_AXIS);
-	}
-	
-	
-	
-	
-	
 	private void buildAxes() {
         System.out.println("buildAxes");
         final PhongMaterial redMaterial = new PhongMaterial();
@@ -232,35 +155,46 @@ public class Appen3D {
 	}
 	private void buildCamera() {
 		System.out.println("buildCamera");
-		ch=new CameraHandler(container, axisGroup, timeline, timelinePlaying);
+		
 		ch.handleKeyboard(scene, container);
         ch.handleMouse(scene, container);
-        cameraXform=ch.getCameraXform();
-        cameraXform2=ch.getCameraXform2();
-        cameraXform3=ch.getCameraXform3();
     }
 	private SubScene subScene(){
+		System.out.println("subScene");
 		SubScene scene3d = new SubScene(container, width, height);
 	    scene3d.setFill(Color.rgb(10, 10, 40));
-//	    scene3d.setCamera(ch.getCamera());
 	    sbs=scene3d;
 	    return scene3d;
 	}
+	private TextArea makeDistBox(){
+		TextArea textArea= new TextArea();
+		tpb.addDistControls(textArea);
+		return textArea;
+	}
+	private Slider scaleSlider(){
+		if(tpb==null)tpb=new TopBarControls();
+		
+		Slider s=new Slider(1,1000,500);
+		renderScale=(int) s.getValue();
+		tpb.sliderHandler(s, renderScale, ch);
+		return s;
+	}
 	private VBox makeTopBar(){
-		VBox b=new VBox(fps);
+		System.out.println("makeTopBar");
+		VBox b=new VBox(fps,scaleSlider(),makeDistBox());
 		return b;
 	}
 	private void setUp(Stage primaryStage, AnimationTimer at){
 		System.out.println("setUp");
 		container=new Xform();
 		phys=new Physics3D(container);
+		ch=new CameraHandler(container, axisGroup, timeline, timelinePlaying);
 		topBar=new VBox(makeTopBar(),subScene());
 		buildScene();
 		buildCamera();
 		buildAxes();
 		makeStage(primaryStage);
 		primaryStage.show();
-//		scene.setCamera
 		sbs.setCamera(ch.getCamera());
 		before();
 		System.out.println("starting loop");

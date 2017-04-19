@@ -20,7 +20,7 @@ public class CameraHandler {
     private static Xform cameraXform = new Xform();
     private static Xform cameraXform2 = new Xform();
     private static Xform cameraXform3 = new Xform(); 
-    final double cameraDistance = 1000000;
+    double cameraDistance = 1000000;
     
     private static Timeline timeline;
     private static boolean timelinePlaying;
@@ -50,6 +50,7 @@ public class CameraHandler {
 				mouseOldX = me.getSceneX();
 				mouseOldY = me.getSceneY();
 			}
+			
 		});
 		scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
@@ -286,7 +287,13 @@ public class CameraHandler {
 	public double getCameraDistance() {
 		return cameraDistance;
 	}
-
+	private void updateCamDistance(){
+		camera.setTranslateZ(-cameraDistance);
+	}
+	public void setDist(double dist){
+		cameraDistance=dist;
+		updateCamDistance();
+	}
 	private void buildCamera(){
 		cameraXform.getChildren().add(cameraXform2);
         cameraXform2.getChildren().add(cameraXform3);

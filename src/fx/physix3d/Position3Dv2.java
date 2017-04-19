@@ -14,9 +14,11 @@ import javafx.scene.transform.Translate;
 public abstract class Position3Dv2 extends Vec3d{
 	private Group world;
 	private PointLight light;
-	public Position3Dv2(double xPos,double yPos,double zPos, Group world){
-		super(xPos,yPos,zPos);
+	private static Integer renderScale;
+	public Position3Dv2(double xPos,double yPos,double zPos, Group world, Integer rs){
+		super(xPos*rs,yPos*rs,zPos*rs);
 		this.world=world;
+		this.renderScale=rs;
 		light=new PointLight();
 		light.setTranslateX(x);
 		light.setTranslateY(y);
@@ -24,13 +26,13 @@ public abstract class Position3Dv2 extends Vec3d{
 		world.getChildren().add(light);
 	}
 	public void setX(double newX){
-		super.x=newX;
+		super.x=newX*renderScale;
 	}
 	public void setY(double newY){
-		super.y=newY;
+		super.y=newY*renderScale;
 	}
 	public void setZ(double newZ){
-		super.z=newZ;
+		super.z=newZ*renderScale;
 	}
 	public void lightSwitch() {
 		boolean a=light.isLightOn();
