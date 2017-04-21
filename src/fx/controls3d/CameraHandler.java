@@ -20,7 +20,7 @@ public class CameraHandler {
     private static Xform cameraXform = new Xform();
     private static Xform cameraXform2 = new Xform();
     private static Xform cameraXform3 = new Xform(); 
-    double cameraDistance = 1000000;
+    double cameraDistance = 500000;
     
     private static Timeline timeline;
     private static boolean timelinePlaying;

@@ -30,6 +30,9 @@ public class Physics3D {
 	public boolean isEmpty(){
 		return (planetList!=null);
 	}
+	public Planet3D get(int index){
+		return planetList.get(index);
+	}
 	//======================SETTERS==============================
 	public boolean clearPath() {
 		return clear;
@@ -68,6 +71,11 @@ public class Physics3D {
 		System.out.println("======================================================================");
 		for(Planet3D p:planetList){
 			System.out.println("Planet"+planetList.indexOf(p)+":"+p);
+		}
+	}
+	public void updateScale(Double scale){
+		for(Planet3D p:planetList){
+			p.updateScale(scale);
 		}
 	}
 }

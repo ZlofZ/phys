@@ -15,7 +15,8 @@ public class Planet3D extends Body3D {
 	private final double RADIUS_KM;
 	private final double DENSITY_G_CM=5.2;
 	private final double VOLUME_KM;
-	private static Integer renderScale;
+	private static Double renderScale;
+	private double timeStep=3000;
 	
 	private final Vec3d FIRSTPOS;
 	private Vec3d oldPos;
@@ -23,7 +24,7 @@ public class Planet3D extends Body3D {
 	private Color color;
 	private Sphere sphere;
 	private boolean backtostart=false;
-	public Planet3D(double x, double y, double z, int radius, double mass, Color color, Group world, Integer rs){
+	public Planet3D(double x, double y, double z, int radius, double mass, Color color, Group world, Double rs){
 		super(x, y, z, world, rs);
 		renderScale=rs;
 		oldPos = new Vec3d(this);
@@ -33,12 +34,12 @@ public class Planet3D extends Body3D {
 		MASS_KG=mass;
 		this.color=color;
 		makeSphere(radius*renderScale);
-		System.out.println("Constructing planet at ("+x+","+y+","+z+"), radius:"+radius+"("+sphere.getRadius()+" in program), and mass:"+mass+"("+MASS_KG+" in program)");
+		System.out.println("Constructing planet at ("+x+","+y+","+z+"), in program:("+sphere.getTranslateX()+","+sphere.getTranslateY()+","+sphere.getTranslateZ()+"), radius:"+radius+"("+sphere.getRadius()+" in program), and mass:"+mass+"("+MASS_KG+" in program)");
 		world.getChildren().add(sphere);
 	}
 	@Deprecated
 	public Planet3D(double x, double y, double z, int radius, Color color, Group world){
-		super(x, y, z, world, new Integer(0));
+		super(x, y, z, world, new Double(0));
 		System.out.println("Constructing planet at ("+x+","+y+","+z+"), radius:"+radius);
 		oldPos = new Vec3d(this);
 		FIRSTPOS=new Vec3d(this);
@@ -59,10 +60,10 @@ public class Planet3D extends Body3D {
 		return this.color;
 	}
 	public double getRadius(){
-		return RADIUS_KM/renderScale;
+		return RADIUS_KM*renderScale;
 	}
 	public double getMass(){
-		return MASS_KG/renderScale;
+		return MASS_KG;
 	}
 	
 	//===============SETTERS==============
@@ -81,9 +82,9 @@ public class Planet3D extends Body3D {
 	}
 	private void setSphereTranslate(){
 		sphere.setMaterial(new PhongMaterial(color));
-		sphere.setTranslateX(x/renderScale);
-		sphere.setTranslateY(y/renderScale);
-		sphere.setTranslateZ(z/renderScale);
+		sphere.setTranslateX(x*renderScale);
+		sphere.setTranslateY(y*renderScale);
+		sphere.setTranslateZ(z*renderScale);
 		
 	}
 	
@@ -104,16 +105,18 @@ public class Planet3D extends Body3D {
 	}
 	public void updateP(Group world) {
 		System.out.println("");
-		System.out.println("oldpos:("+x+","+y+","+z+")");
+//		System.out.println("oldpos:("+x+","+y+","+z+")");
 		if(counter==0&!backtostart){
 			passedFirst();
 			counter=60;
-			createConnection(oldPos, this, sphere);
+//			createConnection(oldPos, this, sphere);
 			oldPos.set(this);
 		}else if (backtostart)System.out.println("BACK AROUND");
-		super.sub(getVelocity());
+		Vec3d tempVel=new Vec3d(getVelocity());
+		tempVel.mul(timeStep);
+		super.sub(tempVel);
 		counter--;
-		System.out.println("newpos:("+x+","+y+","+z+")");
+//		System.out.println("newpos:("+x+","+y+","+z+")");
 		setSphereTranslate();
 		System.out.println("sphere moved to: ("+sphere.getTranslateX()+","+sphere.getTranslateY()+","+sphere.getTranslateY()+")");
 //		super.updateLight();
@@ -132,5 +135,9 @@ public class Planet3D extends Body3D {
 		reflection.setFraction(1);
 		sphere.setEffect(reflection);
 		sphere.setVisible(true);
+	}
+	public void updateScale(Double scale){
+		sphere.setRadius(getRadius());
+		this.renderScale=scale;
 	}
 }

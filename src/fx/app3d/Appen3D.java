@@ -20,6 +20,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
@@ -47,7 +48,7 @@ public class Appen3D {
     Physics3D phys;
     private static double width = 1280;
 	private static double height = 720;
-	public static Integer renderScale;
+	public static Double renderScale;
 	private Timeline timeline=new Timeline();
     boolean timelinePlaying = false;
     
@@ -63,6 +64,7 @@ public class Appen3D {
 	
 	
 	public void draw(){
+		System.out.println("renderScale:"+renderScale);
 		if(phys.isEmpty()){
 			System.out.println("gravCalc");
 			phys.gravityCalc();
@@ -90,11 +92,11 @@ public class Appen3D {
 		System.out.println("PlanetCreation");
 		Planet3D s=new Planet3D(0, 0, 0, 695700, 1.989*Math.pow(10, 30), Color.ORANGERED, container, renderScale);
 		Planet3D e=new Planet3D(149600000, 0, 0, 6371,(5.972*Math.pow(10, 24)), Color.GREEN, container, renderScale);
-		e.addVelocity(0,0,29782/100);
+		e.addVelocity(0,0,29.78);
 //		s.lightSwitch();
 //		e.setX(0);
-		e.lightSwitch();
-		e.setSphereSize(1000);
+//		e.lightSwitch();
+		e.setSphereSize(10000);
 //		s.invisible();
 //		s.createConnection(s, e, s.getSphere());
 		phys.addPlanet(s);
@@ -126,16 +128,16 @@ public class Appen3D {
         blueMaterial.setDiffuseColor(Color.DARKBLUE);
         blueMaterial.setSpecularColor(Color.BLUE);
  
-        final Box xAxis = new Box(24000.0, 2, 2);
-        final Box yAxis = new Box(2, 24000.0, 2);
-        final Box zAxis = new Box(2, 2, 24000.0);
+        final Box xAxis = new Box(240000.0, 10, 10);
+        final Box yAxis = new Box(10, 240000.0, 10);
+        final Box zAxis = new Box(10, 10, 240000.0);
         
         xAxis.setMaterial(redMaterial);
         yAxis.setMaterial(greenMaterial);
         zAxis.setMaterial(blueMaterial);
  
         axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-        world.getChildren().addAll(axisGroup);
+        container.getChildren().addAll(axisGroup);
     }
 	
 	private void buildScene() {
@@ -166,17 +168,22 @@ public class Appen3D {
 	    sbs=scene3d;
 	    return scene3d;
 	}
-	private TextArea makeDistBox(){
+	private HBox makeDistBox(){
 		TextArea textArea= new TextArea();
-		tpb.addDistControls(textArea);
-		return textArea;
+		textArea.setMaxWidth(100);
+		textArea.setPrefRowCount(1);
+		textArea.setPrefColumnCount(11);
+		Button b=new Button("New Distance");
+		Button b2=new Button("scaleUpEarth");
+		tpb.addDistControls(textArea,b,b2);
+		return new HBox(textArea,b,b2);
 	}
 	private Slider scaleSlider(){
 		if(tpb==null)tpb=new TopBarControls();
 		
-		Slider s=new Slider(1,1000,500);
-		renderScale=(int) s.getValue();
-		tpb.sliderHandler(s, renderScale, ch);
+		Slider s=new Slider(0.0,1.0,0.002);
+		renderScale= s.getValue();
+		tpb.sliderHandler(s, renderScale, ch, phys);
 		return s;
 	}
 	private VBox makeTopBar(){
@@ -200,7 +207,6 @@ public class Appen3D {
 		System.out.println("starting loop");
 		at.start();
 	}
-
 	public Appen3D(Stage primaryStage, AnimationTimer at, Group root, Xform world){
 		this.root=root;
 		this.world=world;

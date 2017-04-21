@@ -14,25 +14,25 @@ import javafx.scene.transform.Translate;
 public abstract class Position3Dv2 extends Vec3d{
 	private Group world;
 	private PointLight light;
-	private static Integer renderScale;
-	public Position3Dv2(double xPos,double yPos,double zPos, Group world, Integer rs){
-		super(xPos*rs,yPos*rs,zPos*rs);
+	private static Double renderScale;
+	public Position3Dv2(double xPos,double yPos,double zPos, Group world, Double rs){
+		super(xPos,yPos,zPos);
 		this.world=world;
 		this.renderScale=rs;
-		light=new PointLight();
-		light.setTranslateX(x);
-		light.setTranslateY(y);
-		light.setTranslateZ(z);
-		world.getChildren().add(light);
+//		light=new PointLight();
+//		light.setTranslateX(x);
+//		light.setTranslateY(y);
+//		light.setTranslateZ(z);
+//		world.getChildren().add(light);
 	}
 	public void setX(double newX){
-		super.x=newX*renderScale;
+		super.x=newX;
 	}
 	public void setY(double newY){
-		super.y=newY*renderScale;
+		super.y=newY;
 	}
 	public void setZ(double newZ){
-		super.z=newZ*renderScale;
+		super.z=newZ;
 	}
 	public void lightSwitch() {
 		boolean a=light.isLightOn();
@@ -76,10 +76,6 @@ public abstract class Position3Dv2 extends Vec3d{
 	    line.setVisible(true);
 	    System.out.println("line, height: "+line.getHeight()+"radius:"+line.getRadius()+"pos:"+line.getTranslateX()+","+line.getTranslateY()+","+line.getTranslateZ());
 	    world.getChildren().add(line);
-	}
-	public void updatePos(Vec3d velocity, Sphere sphere){
-		
-		
 	}
 	public void makePos(Vec3d direction,double speed){
 //		Vec3d v=new Vec3d((direction.getX()*speed), (direction.getY()*speed), (direction.getY()*speed));
