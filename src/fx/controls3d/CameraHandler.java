@@ -2,12 +2,10 @@ package fx.controls3d;
 
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
-import static javafx.scene.input.KeyCode.*;
 
 import fx.launch.Xform;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Duration;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
@@ -94,11 +92,11 @@ public class CameraHandler {
 	}
 
 	public void handleKeyboard(Scene scene, final Node root) {
-		final boolean moveCamera = true;
+//		final boolean moveCamera = true;
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				Duration currentTime;
+//				Duration currentTime;
 				switch (event.getCode()) {
 				case Z:
 					// System.out.print("Zdown");
@@ -312,8 +310,8 @@ public class CameraHandler {
         
 	}
 	public CameraHandler(Group root, Group axisGroup, Timeline timeline, boolean timelineplaying){
-		this.timeline=timeline;
-		this.timelinePlaying=timelineplaying;
+//		this.timeline=timeline;
+//		this.timelinePlaying=timelineplaying;
 		this.axisGroup=axisGroup;
 		setUp(root);
 	}

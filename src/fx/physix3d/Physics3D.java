@@ -1,19 +1,10 @@
 package fx.physix3d;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-import com.sun.javafx.geom.Vec3d;
 
 import fx.app3d.Planet3D;
-import fx.launch.Xform;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Sphere;
 
 public class Physics3D {
 	private ArrayList<Planet3D>planetList;
@@ -37,6 +28,7 @@ public class Physics3D {
 	public boolean clearPath() {
 		return clear;
 	}
+	@SuppressWarnings("unused")
 	private void makeClear(){
 		clear=!clear;
 	}

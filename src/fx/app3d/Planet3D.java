@@ -15,7 +15,7 @@ public class Planet3D extends Body3D {
 	private final double RADIUS_KM;
 	private final double DENSITY_G_CM=5.2;
 	private final double VOLUME_KM;
-	private static Double renderScale;
+	private Double renderScale;
 	private double timeStep=3000;
 	
 	private final Vec3d FIRSTPOS;

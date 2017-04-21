@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Random;
 
-import com.sun.javafx.perf.PerformanceTracker;
 
 import fx.controls3d.CameraHandler;
 import fx.controls3d.TopBarControls;
@@ -13,11 +12,8 @@ import fx.launch.Xform;
 import fx.physix3d.Physics3D;
 import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
-import javafx.geometry.Side;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
@@ -29,15 +25,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Sphere;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
 public class Appen3D {
 	private final Group root;
 	final Group axisGroup;
-	private Xform world;
 	private Scene scene;
 	private Label fps=new Label("fps");
 	private CameraHandler ch;
@@ -107,6 +99,7 @@ public class Appen3D {
 		phys.updatePos();
 		phys.printPlanets();
 	}
+	@SuppressWarnings({ "deprecation", "unused" })
 	private void makePlanets() {
 		Random random=new Random();
 		for(int i=0;i<3;i++){
@@ -207,9 +200,8 @@ public class Appen3D {
 		System.out.println("starting loop");
 		at.start();
 	}
-	public Appen3D(Stage primaryStage, AnimationTimer at, Group root, Xform world){
+	public Appen3D(Stage primaryStage, AnimationTimer at, Group root){
 		this.root=root;
-		this.world=world;
 		axisGroup = new Group();
 		setUp(primaryStage,at);
 	}

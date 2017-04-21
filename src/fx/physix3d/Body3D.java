@@ -7,7 +7,8 @@ import javafx.scene.Group;
 
 public abstract class Body3D extends Position3Dv2 {
 	private static final double G=6.67408*Math.pow(10, -11);
-	private static Double renderScale;
+	@SuppressWarnings("unused")
+	private Double renderScale;
 	private Vec3d velocity=new Vec3d();
 	
 	public Body3D(double xPos, double yPos, double zPos, Group world, Double rs) {

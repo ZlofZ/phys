@@ -1,7 +1,6 @@
 package fx.physix3d;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import fx.app2d.Planet2D;
 

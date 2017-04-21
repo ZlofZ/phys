@@ -2,7 +2,6 @@ package fx.physix3d;
 
 import com.sun.javafx.geom.Vec3d;
 
-import fx.app3d.Planet3D;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
@@ -14,7 +13,8 @@ import javafx.scene.transform.Translate;
 public abstract class Position3Dv2 extends Vec3d{
 	private Group world;
 	private PointLight light;
-	private static Double renderScale;
+	@SuppressWarnings("unused")
+	private Double renderScale;
 	public Position3Dv2(double xPos,double yPos,double zPos, Group world, Double rs){
 		super(xPos,yPos,zPos);
 		this.world=world;
@@ -47,14 +47,9 @@ public abstract class Position3Dv2 extends Vec3d{
 		light.setTranslateY(y);
 		light.setTranslateZ(z);
 	}
-	
-	private void makeTail(Sphere sphere){
-
-		
-	}
 	public void createConnection(Vec3d origin, Vec3d target,Sphere s) {
 		
-	    Point3D yAxis = new Point3D(0, 1, 0);
+//	    Point3D yAxis = new Point3D(0, 1, 0);
 	    Vec3d diff = new Vec3d(target);
 	    diff.sub(origin);
 	    double height = diff.length();

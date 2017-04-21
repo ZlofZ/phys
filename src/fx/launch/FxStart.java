@@ -6,7 +6,6 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
-import javafx.scene.Camera;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -18,7 +17,6 @@ public class FxStart extends Application {
 	
 	
 	private final Group root = new Group();
-	private final Xform world = new Xform();
     
     private Canvas canvas;
     private GraphicsContext gc;
@@ -50,7 +48,7 @@ public class FxStart extends Application {
 	
 	private void run3D(Stage primaryStage){
 		check3DSupport();
-		app3d=new Appen3D(primaryStage,at,root,world);
+		app3d=new Appen3D(primaryStage,at,root);
 	}
 	
 	private void run2D(Stage primaryStage){
