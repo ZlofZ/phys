@@ -1,10 +1,8 @@
 package fx.app3d;
 
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Random;
-
 
 import fx.controls3d.CameraHandler;
 import fx.controls3d.TopBarControls;
